@@ -1,0 +1,10 @@
+Class,F1,Jaccard,Accuracy
+hood           ,0.55855,0.41284
+front door     ,0.04522,0.02347
+rear door      ,0.00013,0.00006
+frame          ,0.09037,0.04817
+rear quater panel,0.01369,0.00710
+trunk lid      ,0.00571,0.00290
+fender         ,0.00987,0.00503
+bumper         ,0.00281,0.00141
+rest of car    ,0.33308,0.22615
