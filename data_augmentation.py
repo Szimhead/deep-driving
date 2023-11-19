@@ -81,6 +81,12 @@ def get_data():
         image = channels[:, :, :3]
         masks.append(target_channel)
         images.append(image)
+
+    for channels in o_cars:
+        target_channel = channels[:, :, 3]
+        image = channels[:, :, :3]
+        masks.append(target_channel)
+        images.append(image)
     random.Random(SEED).shuffle(images)
     random.Random(SEED).shuffle(masks)
     return images, masks

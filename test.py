@@ -93,7 +93,7 @@ if __name__ == "__main__":
         mask_x = y
         onehot_mask = []
         for color in COLORMAP:
-            cmap = np.all(np.equal(y, color), axis=-1)
+            cmap = np.equal(y, color)
             onehot_mask.append(cmap)
         onehot_mask = np.stack(onehot_mask, axis=-1)
         onehot_mask = np.argmax(onehot_mask, axis=-1)
@@ -117,9 +117,10 @@ if __name__ == "__main__":
         """ Calculating the metrics values """
         f1_value = f1_score(onehot_mask, pred, labels=labels, average=None, zero_division=0)
         jac_value = jaccard_score(onehot_mask, pred, labels=labels, average=None, zero_division=0)
-        acc_value = accuracy_score(labels, pred)
+        # acc_value = accuracy_score(onehot_mask, pred)
 
-        SCORE.append([f1_value, jac_value, acc_value])
+        SCORE.append([f1_value, jac_value])
+        # SCORE.append([f1_value, jac_value, acc_value])
 
     """ Metrics values """
     score = np.array(SCORE)
@@ -136,19 +137,22 @@ if __name__ == "__main__":
         class_name = CLASSES[i]
         f1 = score[0, i]
         jac = score[1, i]
-        acc = score[2, i]
-        dstr = f"{class_name:15s}: {f1:1.5f} - {jac:1.5f} - {acc:1.5f}"
+        # acc = score[2, i]
+        dstr = f"{class_name:15s}: {f1:1.5f} - {jac:1.5f}"
         print(dstr)
-        f.write(f"{class_name:15s},{f1:1.5f},{jac:1.5f},{acc:1.5f}\n")
+        f.write(f"{class_name:15s},{f1:1.5f},{jac:1.5f}\n")
+        # dstr = f"{class_name:15s}: {f1:1.5f} - {jac:1.5f} - {acc:1.5f}"
+        # print(dstr)
+        # f.write(f"{class_name:15s},{f1:1.5f},{jac:1.5f},{acc:1.5f}\n")
 
     print("-" * 35)
     class_mean = np.mean(score, axis=-1)
     class_name = "Mean"
     f1 = class_mean[0]
     jac = class_mean[1]
-    acc = class_mean[2]
-    dstr = f"{class_name:15s}: {f1:1.5f} - {jac:1.5f} - {acc:1.5f}"
+    # acc = class_mean[2]
+    dstr = f"{class_name:15s}: {f1:1.5f} - {jac:1.5f}"
     print(dstr)
-    f.write(f"{class_name:15s},{f1:1.5f},{jac:1.5f},{acc:1.5f}\n")
+    f.write(f"{class_name:15s},{f1:1.5f},{jac:1.5f}\n")
 
     f.close()
