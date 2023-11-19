@@ -1,19 +1,19 @@
 import os
-
 from jproperties import Properties
 
 from data_augmentation import get_data
+from EMU import EMAU
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import numpy as np
 import pandas as pd
-import cv2
+#import cv2
 from glob import glob
 import scipy.io
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 from tensorflow.keras.callbacks import ModelCheckpoint, ReduceLROnPlateau, EarlyStopping, CSVLogger
-from unet import build_unet
+from unet import build_unet_with_emu
 
 """ Global parameters """
 global IMG_H
@@ -152,8 +152,11 @@ if __name__ == "__main__":
     valid_dataset = tf_dataset(valid_x, valid_y, batch=batch_size)
 
     """ Model """
-    model = build_unet(input_shape, NUM_CLASSES)
-    model.load_weights(model_path)
+    model =build_unet_with_emu(input_shape, NUM_CLASSES)
+
+    # to load a saved model
+    #model.load_weights(model_path)
+    
     model.compile(
         loss="categorical_crossentropy",
         optimizer=tf.keras.optimizers.Adam(lr)
