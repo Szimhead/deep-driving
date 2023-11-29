@@ -87,23 +87,24 @@ def process_image(mask_folder, image_folder, image_name,color):
 #         new_image.save(file_path)
 
 def get_data():
-    configs = Properties()
-    with open('application.properties', 'rb') as read_prop:
-        configs.load(read_prop)
-    b_cars, o_cars, test = load_numpy_arrays(configs.get("FOLDER_PATH").data)
     masks = []
     images = []
-    for channels in b_cars:
-        target_channel = channels[:, :, 3]
-        image = channels[:, :, :3]
-        masks.append(target_channel)
-        images.append(image)
 
-    for channels in o_cars:
-        target_channel = channels[:, :, 3]
-        image = channels[:, :, :3]
-        masks.append(target_channel)
-        images.append(image)
+    for image_name in os.listdir(configs.get("BLACK_IMG").data):
+        # check if the image ends with png
+        if (image_name.endswith(".jpg")):
+            #image_name = os.path.splitext(os.path.basename(configs.get("BLACK_MASK").data))[0][:4]  # Extracting the first 4 digits of the file name without extension
+            image, mask = process_image(configs.get("FOLDER_PATH").data, configs.get("BLACK_IMG").data, image_name,'black_5_doors')
+            masks.append(mask)
+            images.append(image)
+
+    for image_name in os.listdir(configs.get("ORANGE_IMG").data):
+        # check if the image ends with png
+        if (image_name.endswith(".jpg")):
+            #image_name = os.path.splitext(os.path.basename(configs.get("BLACK_MASK").data))[0][:4]  # Extracting the first 4 digits of the file name without extension
+            image, mask = process_image(configs.get("FOLDER_PATH").data, configs.get("ORANGE_IMG").data, image_name,'orange_3_doors')
+            masks.append(mask)
+            images.append(image)
     random.Random(SEED).shuffle(images)
     random.Random(SEED).shuffle(masks)
     return images, masks
