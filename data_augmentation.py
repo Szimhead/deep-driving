@@ -46,7 +46,7 @@ def process_image(mask_folder, image_folder, image_name,color):
     image = Image.open(image_path)
 
     # Resize the image to 256x256
-    #image = image.resize((256, 256))
+    image = image.resize((256, 256))
 
     # Convert the images to NumPy arrays
     #mask_array = np.array(mask)
