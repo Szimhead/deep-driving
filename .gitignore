@@ -2,3 +2,6 @@
 __pycache__/
 files/model.h5
 /results
+files_ume/
+files_unet
+
