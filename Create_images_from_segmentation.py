@@ -6,7 +6,17 @@ import os
 import numpy as np
 import cv2
 import shutil
-
+def read_properties_file(file_path):
+    """
+    Reads a properties file with a simple key-value pair structure.
+    """
+    properties = {}
+    with open(file_path, 'r') as file:
+        for line in file:
+            if '=' in line:
+                key, value = line.strip().split('=', 1)
+                properties[key.strip()] = value.strip()
+    return properties
 def clear_directory(directory):
     if os.path.exists(directory):
         for file in os.listdir(directory):
@@ -181,27 +191,32 @@ def process_images(segmented_folder, non_segmented_folder, landscapes_folder, sa
     print("Image processing completed.")
 
 if __name__ == '__main__':
+    # Read configurations
+    properties_file_path = 'C:/Users/eyste.EYSTEINSCOMPUTE/Downloads/application (2).properties'  # Replace with the actual path
+    properties = read_properties_file(properties_file_path)
+
+    # Use the properties in your logic
     configurations = [
         {
-            "segmented_folder": 'C:/Users/eyste/Documents/Deeplearning/carseg_data/carseg_data/images/photo/with_segmentation',
-            "non_segmented_folder": 'C:/Users/eyste/Documents/Deeplearning/carseg_data/carseg_data/images/photo/no_segmentation',
-            "landscapes_folder": 'C:/Users/eyste/Documents/Deeplearning/carseg_data/carseg_data/images/landscapes',
-            "save_directory": 'C:/Users/eyste/Documents/Deeplearning/Real Cars ready',
-            "file_extension": '.jpg'  # Set file extension based on the image types in folders
+            "segmented_folder": properties['REAL_MASK'],
+            "non_segmented_folder": properties['REAL_IMG'],
+            "landscapes_folder": properties['LANDSCAPES'],  # Assuming landscapes are in LANDSCAPES
+            "save_directory": properties['REAL_CARS_READY'],
+            "file_extension": '.jpg'  # Assuming jpg for real cars
         },
         {
-            "segmented_folder": 'C:/Users/eyste/Documents/Deeplearning/carseg_data/carseg_data/images/black_5_doors/with_segmentation',
-            "non_segmented_folder": 'C:/Users/eyste/Documents/Deeplearning/carseg_data/carseg_data/images/black_5_doors/no_segmentation',
-            "landscapes_folder": 'C:/Users/eyste/Documents/Deeplearning/carseg_data/carseg_data/images/landscapes',
-            "save_directory": 'C:/Users/eyste/Documents/Deeplearning/Black_Cars_ready',
-            "file_extension": '.png'  # Assuming these are PNG files
+            "segmented_folder": properties['BLACK_MASK'],
+            "non_segmented_folder": properties['BLACK_IMG'],
+            "landscapes_folder": properties['LANDSCAPES'],  # Assuming the same for all
+            "save_directory": properties['BLACK_CARS_READY'],
+            "file_extension": '.png'  # Assuming png for black cars
         },
         {
-            "segmented_folder": "C:/Users/eyste/Documents/Deeplearning/carseg_data/carseg_data/images/orange_3_doors/with_segmentation",
-            "non_segmented_folder": "C:/Users/eyste/Documents/Deeplearning/carseg_data/carseg_data/images/orange_3_doors/no_segmentation",
-            "landscapes_folder": 'C:/Users/eyste/Documents/Deeplearning/carseg_data/carseg_data/images/landscapes',
-            "save_directory": 'C:/Users/eyste/Documents/Deeplearning/Orange_Cars_ready',
-            "file_extension": '.png'  # Assuming these are PNG files
+            "segmented_folder": properties['ORAGNE_MASK'],  # Check for the typo in 'ORAGNE'
+            "non_segmented_folder": properties['ORANGE_IMG'],
+            "landscapes_folder": properties['LANDSCAPES'],  # Assuming the same for all
+            "save_directory": properties['ORANGE_CARS_READY'],
+            "file_extension": '.png'  # Assuming png for orange cars
         }
     ]
 
