@@ -42,7 +42,7 @@ def process_image(mask_folder, image_folder, image_name,color):
     image_path = os.path.join(image_folder, f"{image_name}")
 
     #mask = Image.open(mask_path)
-    mask = np.load(mask_path)
+    mask = np.load(mask_path)[:,:,3]
     image = Image.open(image_path)
 
     # Resize the image to 256x256
@@ -87,6 +87,9 @@ def process_image(mask_folder, image_folder, image_name,color):
 #         new_image.save(file_path)
 
 def get_data():
+    configs = Properties()
+    with open('application.properties', 'rb') as read_prop:
+        configs.load(read_prop)
     masks = []
     images = []
 
