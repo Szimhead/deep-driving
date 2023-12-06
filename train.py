@@ -48,7 +48,7 @@ def load_dataset(path, split=0.2):
 
 
 def get_colormap():
-    colormap = np.array(
+    mask_values = np.array(
         [
             10,
             20,
@@ -73,7 +73,19 @@ def get_colormap():
         "rest of car"
     ]
 
-    return classes, colormap
+    colormap = {
+        10: (250, 149, 10),
+        20: (19, 98, 19),
+        30: (249, 249, 10),
+        40: (10, 248, 250),
+        50: (149, 7, 149),
+        60: (5, 249, 9),
+        70: (20, 19, 249),
+        80: (249, 9, 250),
+        90: (0, 0, 0)
+    }
+
+    return classes, mask_values, colormap
 
 
 def read_image_mask(x, y):
@@ -83,7 +95,7 @@ def read_image_mask(x, y):
 
     """ Mask processing """
     output = []
-    for color in COLORMAP:
+    for color in MASK_VALUES:
         cmap = np.equal(y, color)
         output.append(cmap)
     output = np.stack(output, axis=-1)
@@ -145,7 +157,7 @@ if __name__ == "__main__":
     print("")
 
     """ Process the colormap """
-    CLASSES, COLORMAP = get_colormap()
+    CLASSES, MASK_VALUES, COLORMAP = get_colormap()
 
     """ Dataset Pipeline """
     train_dataset = tf_dataset(train_x, train_y, batch=batch_size)

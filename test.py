@@ -21,16 +21,16 @@ global CLASSES
 global COLORMAP
 
 
-def grayscale_to_rgb(mask, classes, colormap):
+def grayscale_to_rgb(mask, mask_values, colormap):
     h, w = mask.shape
     mask = mask.astype(np.int32)
     output = []
 
     for i, pixel in enumerate(mask.flatten()):
-        output.append(colormap[pixel])
+        output.append(colormap[mask_values[pixel]])
 
-    output = np.reshape(output, (h, w))
-    output = np.stack((output,) * 3, axis=-1)
+    output = np.reshape(output, (h, w, 3))
+    # output = np.stack((output,) * 3, axis=-1)
     return output
 
 
@@ -38,9 +38,10 @@ def save_results(image, mask, pred, save_image_path):
     h, w, _ = image.shape
     line = np.ones((h, 10, 3)) * 255
 
-    pred = grayscale_to_rgb(pred, CLASSES, COLORMAP)
+    pred = grayscale_to_rgb(pred, MASK_VALUES, COLORMAP)
 
-    mask = np.stack((mask,) * 3, axis=-1)
+    mask = grayscale_to_rgb(mask/10-1, MASK_VALUES, COLORMAP)
+    # mask = np.stack((mask,) * 3, axis=-1)
 
     cat_images = np.concatenate([image, line, mask, line, pred], axis=1)
     cv2.imwrite(save_image_path, cat_images)
@@ -65,7 +66,7 @@ if __name__ == "__main__":
     model_path = os.path.join("files", "model.h5")
 
     """ Colormap """
-    CLASSES, COLORMAP = get_colormap()
+    CLASSES, MASK_VALUES, COLORMAP = get_colormap()
 
     """ Model """
     model = tf.keras.models.load_model(model_path)
@@ -92,7 +93,7 @@ if __name__ == "__main__":
 
         mask_x = y
         onehot_mask = []
-        for color in COLORMAP:
+        for color in MASK_VALUES:
             cmap = np.equal(y, color)
             onehot_mask.append(cmap)
         onehot_mask = np.stack(onehot_mask, axis=-1)
