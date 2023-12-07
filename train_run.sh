@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#BSUB -J test_ngpu
-#BSUB -n 4
+#BSUB -J test_gpu
+#BSUB -n 8
 #BSUB -R "span[hosts=1]"
 #BSUB -R "rusage[mem=4GB]"
 #BUSB -M 10GB
@@ -9,11 +9,11 @@
 #BSUB -u s232449@dtu.dk
 #BSUB -B
 #BSUB -N
-#BSUB -o out.out
-#BSUB -e out.err
+#BSUB -o out_gpu.out
+#BSUB -e out_gpu.err
 ##BSUB -gpu "num=1:mode=exclusive_process"
-
-export REPO=~/Deep-driving
+##BSUB -q gpuv100
+export REPO=~/deep-driving
 
 if [[ ! -d ${REPO}/job_out ]]; then
    mkdir ${REPO}/job_out
@@ -38,4 +38,4 @@ python3 -m pip install torch
 python3 -m pip install tensorflow==2.12.0
 python3 -m pip install scikit-learn
 # run training
-python3 train.py
+python3 train_emu.py
