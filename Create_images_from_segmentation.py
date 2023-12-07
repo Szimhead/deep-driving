@@ -137,17 +137,16 @@ def composite_car_on_landscape(car, landscape_image_path, target_size=(255, 255)
 
 
 hsv_ranges = [
-    ((82, 75, 90), (96, 100, 100)),  # Cyan-like color
-    ((112, 85, 85), (128, 100, 100)),  # Blue color
-    ((305, 70, 34.0), (325, 100, 44.0)),  # green color
+    ((82 , 75, 90), (96, 100, 100)),  # Cyan-like color
+    ((112, 85, 85), (128, 100, 100 )),  # Blue color
+    ((305, 70, 34.0), (325, 100 , 44.0)),  # green color
     ((146, 80, 55), (156, 100, 65)),  # purple color
     ((23, 85, 85), (38, 100, 100)),  # Yellow color
     ((14, 65, 75), (25, 100, 100)),  # Orange color
-    ((138, 85, 84), (160, 100, 100)),  # Magenta color
-    # ((120.0 / 2 - x, 80 - x, 38 - x), (120.0 / 2 + x, 80.0 + x, 38.0 + x)),  # Additional color 1
+    ((138,85, 84), (160, 100, 100)),  # Magenta color
+    ((45,84, 84), (65, 100, 100)),  # Light Green color
 
 ]
-
 
 def load_images(image_folder, image_format=('.jpg', '.png'), max_images=3000):
     images = []
