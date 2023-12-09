@@ -5,4 +5,4 @@ files/model.h5
 files_ume/
 files_unet
 application.properties
-
+local.properties

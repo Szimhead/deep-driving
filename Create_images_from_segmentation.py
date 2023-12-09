@@ -207,7 +207,7 @@ def process_images(segmented_folder, non_segmented_folder, landscapes_folder, sa
 if __name__ == '__main__':
     # Read configurations
     configs = Properties()
-    with open('application.properties', 'rb') as read_prop:
+    with open('local.properties', 'rb') as read_prop:
         configs.load(read_prop)
 
     # Use the properties in your logic
