@@ -33,7 +33,7 @@ def create_dir(path):
 """ Load and split the dataset """
 
 
-def load_dataset(path, split=0.2):
+def load_dataset(split=0.2):
     train_x, train_y = get_data()
 
     split_size = int(split * len(train_x))
@@ -110,7 +110,7 @@ def preprocess(x, y):
         return image, mask
 
     image, mask = tf.numpy_function(f, [x, y], [tf.float32, tf.uint8])
-    image.set_shape([IMG_H, IMG_W, 3])
+    image.set_shape([IMG_H, IMG_W])
     mask.set_shape([IMG_H, IMG_W, NUM_CLASSES])
 
     return image, mask
@@ -137,21 +137,17 @@ if __name__ == "__main__":
     IMG_H = 256
     IMG_W = 256
     NUM_CLASSES = 9
-    input_shape = (IMG_H, IMG_W, 3)
+    input_shape = (IMG_H, IMG_W, 1)
 
     batch_size = 16
-    lr = 1e-8
-    num_epochs = 20
-    configs = Properties()
-    with open('application.properties', 'rb') as read_prop:
-        configs.load(read_prop)
-    dataset_path = configs.get("BLACK").data
+    lr = 1e-6
+    num_epochs = 5
 
     model_path = os.path.join("files", "model.h5")
     csv_path = os.path.join("files", "data.csv")
 
     """ Loading the dataset """
-    (train_x, train_y), (valid_x, valid_y), (test_x, test_y) = load_dataset(dataset_path)
+    (train_x, train_y), (valid_x, valid_y), (test_x, test_y) = load_dataset()
     print(
         f"Train: {len(train_x)}/{len(train_y)} - Valid: {len(valid_x)}/{len(valid_y)} - Test: {len(test_x)}/{len(test_x)}")
     print("")
@@ -173,7 +169,7 @@ if __name__ == "__main__":
         loss="categorical_crossentropy",
         optimizer=tf.keras.optimizers.Adam(lr)
     )
-    # model.summary()
+    model.summary()
 
     """ Training """
     callbacks = [

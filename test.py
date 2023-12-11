@@ -1,13 +1,12 @@
 import os
 
-from jproperties import Properties
+
+from EMU import EMAU
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 import numpy as np
 import cv2
-import pandas as pd
-from glob import glob
 from tqdm import tqdm
 import tensorflow as tf
 from sklearn.metrics import accuracy_score, f1_score, jaccard_score, precision_score, recall_score
@@ -35,8 +34,10 @@ def grayscale_to_rgb(mask, mask_values, colormap):
 
 
 def save_results(image, mask, pred, save_image_path):
-    h, w, _ = image.shape
-    line = np.ones((h, 10, 3)) * 255
+    h, w = image.shape
+    image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+
+    line = np.ones((h, 10, 3 )) * 255
 
     pred = grayscale_to_rgb(pred, MASK_VALUES, COLORMAP)
 
@@ -58,21 +59,18 @@ if __name__ == "__main__":
     """ Hyperparameters """
     IMG_H = 256
     IMG_W = 256
-    NUM_CLASSES = 20
-    configs = Properties()
-    with open('application.properties', 'rb') as read_prop:
-        configs.load(read_prop)
-    dataset_path = configs.get("BLACK").data
+    NUM_CLASSES = 9
+
     model_path = os.path.join("files", "model.h5")
 
     """ Colormap """
     CLASSES, MASK_VALUES, COLORMAP = get_colormap()
 
     """ Model """
-    model = tf.keras.models.load_model(model_path)
-    #model = tf.keras.models.load_model(model_path, custom_objects={'EMAU':EMAU})
+    # model = tf.keras.models.load_model(model_path)
+    model = tf.keras.models.load_model(model_path, custom_objects={'EMAU':EMAU})
     """ Load the dataset """
-    (train_x, train_y), (valid_x, valid_y), (test_x, test_y) = load_dataset(dataset_path)
+    (train_x, train_y), (valid_x, valid_y), (test_x, test_y) = load_dataset()
     print(
         f"Train: {len(train_x)}/{len(train_y)} - Valid: {len(valid_x)}/{len(valid_y)} - Test: {len(test_x)}/{len(test_y)}")
     print("")
