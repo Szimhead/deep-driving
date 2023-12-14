@@ -6,3 +6,5 @@ files_ume/
 files_unet
 application.properties
 local.properties
+train_emu.py
+train_run_unet.sh
